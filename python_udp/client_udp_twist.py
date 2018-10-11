@@ -1,6 +1,15 @@
 # coding=utf-8 
 from twisted.internet.protocol import ClientFactory, Protocol 
 from twisted.internet import reactor 
+
+
+"""
+注册
+
+"""
+
+
+
 class Sender(Protocol): 
     def connectionMade(self): 
         """连接成功后调用""" 
@@ -30,6 +39,6 @@ HOST = '127.0.0.1'
 test = BasicClientFactory(Sender) 
 
 # 连接服务器 
-reactor.connectTCP(HOST, PORT, test) 
+reactor.connectUDP(HOST, PORT, test) 
 reactor.run()
 
