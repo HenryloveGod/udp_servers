@@ -1,7 +1,7 @@
 from twisted.internet import reactor
-from twistworker.stunworker import stun_worker
+from worker.p2p_worker import worker
+from dc_utils.dc_log import logging
 
-import logging 
 import sys
 
 port = 9001
@@ -19,7 +19,7 @@ def hello():
 
 def main(port):
     # 0 means any port, we don't care in this case
-    reactor.listenUDP(port, stun_worker())
+    reactor.listenUDP(port, worker(reactor))
     reactor.callWhenRunning(hello)
     reactor.run()
 
