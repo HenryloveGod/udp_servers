@@ -146,7 +146,13 @@ class dismessage:
         self.user_id = data[12:16]
         self.user_pwd = data[16:20]
         self.data_list = {}
-        self.get_data_list(data)
+        if bytes_to_int(self.msg_length)+20 != len(data):
+            self.data_list["err"] = "stun length not right"
+            self.data_list["data_str"] = str(data)
+            self.data_list["data_hex"] = data.hex()
+        else:
+            self.get_data_list(data)
+
 
 
     def get_data_type(self,next_data):

@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "python3",
+    "python.autoComplete.extraPaths": ["/home/dl/my_github/udp_servers/python_udp/"],
+    "python.jediEnabled": false
+}
