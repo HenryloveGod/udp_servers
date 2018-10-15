@@ -6,15 +6,10 @@ import sys
 
 port = 9001
 
-logging.basicConfig(
-    stream = sys.stdout,
-    level=logging.DEBUG,
-    format=' %(filename)s[%(funcName)s][line:%(lineno)d]: %(message)s',
-    datefmt='%Y-%M-%D'
-    )
+
 
 def hello():
-    logging.info("twist server start on port[%d]" %(port))
+    logging.info("TWISTED SERVER start on port[%d]\r\n\r\n" %(port))
 
 
 def main(port):

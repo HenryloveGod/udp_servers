@@ -9,6 +9,6 @@ import sys
 logging.basicConfig(
     stream = sys.stdout,
     level=logging.DEBUG,
-    format=' %(filename)s[%(funcName)s][line:%(lineno)d] %(message)s',
+    format=' [%(filename)s:%(lineno)d]%(levelname)s: %(message)s',
     datefmt='%Y-%M-%D'
     )
