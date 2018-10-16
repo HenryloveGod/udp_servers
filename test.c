@@ -5,7 +5,6 @@
 typedef struct _paras_st{
 
     int type;
-
     void *any;
 
 }paras_t;
@@ -20,8 +19,7 @@ typedef struct _method_st{
 
 
 void do_test(void *para){
-
-
+    
 
 }
 
