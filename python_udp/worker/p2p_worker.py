@@ -135,7 +135,7 @@ class worker(DatagramProtocol):
     }
 
     """
-        接收数据利用method_cb处理
+        protocol = 1 接收数据利用method_cb处理
     """
     def prtone_method_handle(self,reg_json,addr):
         res = "UNEXCEPT for prtone_method_handle"
@@ -156,11 +156,16 @@ class worker(DatagramProtocol):
         logging.error(res)
         self.transport_write_back(res,addr)
 
-
+    """
+        protocol = 2 接收数据利用method_cb处理
+    """
     def prttwo_method_handle(self,json_data,stream_data,addr,org_data=None):
         if "method" in json_data:
             method = json_data["method"]
             self.prttwo_method_cb[method](self,json_data,stream_data,addr,org_data)
+        else:
+            logging.error("ERROR! No method in json_data")
+            self.transport_write_back(b"ERROR! No method in json_data",addr)
 
 
     """

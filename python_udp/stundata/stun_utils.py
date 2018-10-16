@@ -7,7 +7,6 @@ import ipaddress
 from dc_utils.dc_log import logging
 import sys
 
-
 MESSAGE_MAX_LENGTH = (10240)    #报文最大长度 10kb
 STUN_HEADER_LENGTH = (20)       #报文头 长度 20
 

@@ -34,28 +34,30 @@ class vistor():
         self.socket_fd.connect(server_addr)
         self.user_me = user_me
         
-    def register(self):
-        logging.info("start to register user [%d]" % self.user_me[0])
+    def register(self,auth_value = 0):
+        logging.info("TEST register user [%d]" % self.user_me[0])
         regs = {
             "method":"register",
             "uid":self.user_me[0],
-            "channel":self.user_me[1]
+            "channel":self.user_me[1],
+            "auth_value":auth_value
         }
         bytes_regs = bytes(json.dumps(regs),encoding="utf-8")
         bytes_send = eotudata().bytedata(1,bytes_regs)
         self.socket_fd.send(bytes_send)
         while True:
             data, server = self.socket_fd.recvfrom(4096)
-            logging.debug('received {!r}'.format(data))
+            logging.debug('RECV: {!r}'.format(data))
             return data
 
-    def ask_user(self,user_op,try_times = 10):
+    def ask_user(self,user_op,try_times = 10,pwd = 0):
 
-        logging.info("start to ask user [%d]" % user_op[0])
+        logging.info("TEST ask user [%d]" % user_op[0])
         regs = {
             "method":"ask_user",
             "ask_uid":user_op[0],
-            "channel":user_op[1]
+            "channel":user_op[1],
+            "pwd":pwd
         }
         bytes_regs = bytes(json.dumps(regs),encoding="utf-8")
         bytes_send = eotudata().bytedata(1,bytes_regs)
@@ -67,14 +69,14 @@ class vistor():
                 sleep(3)
                 self.ask_user(user_op)
             else:
-                logging.debug('received {!r}'.format(data))
+                logging.debug('RECV: {!r}'.format(data))
                 return 1,data
 
             if try_times ==0:
                 return -1,"not found"
 
     def ask_user_all(self):
-        logging.info("start to ask user_all")
+        logging.info("TEST ask user_all")
         regs = {
             "method":"ask_user_all"
         }
@@ -83,12 +85,12 @@ class vistor():
         self.socket_fd.send(bytes_send)
         while True:
             data, server = self.socket_fd.recvfrom(4096)
-            logging.debug('received {!r}'.format(data))
+            logging.debug('RECV: {!r}'.format(data))
             return data
 
 
     def turn_data_to_uid(self,turndata,to_uid):
-        logging.info("start to turn_data_to_uid")
+        logging.info("TEST turn_data_to_uid")
         json_regs = {
             "method":"turn_data",
             "to_uid":to_uid,
@@ -101,18 +103,15 @@ class vistor():
         self.socket_fd.send(bytes_send)
         while True:
             data, server = self.socket_fd.recvfrom(4096)
-            logging.debug('received {!r}'.format(data))
+            logging.debug('RECV: {!r}'.format(data))
             return data
 
 
     def loop(self):
         while True:
             data, server = self.socket_fd.recvfrom(4096)
-            logging.debug('received {!r}'.format(data))
+            logging.debug('RECV: {!r}'.format(data))
    
-
-def usage():
-    pass
 
 def set_options():
     global TEST_USER
@@ -121,12 +120,11 @@ def set_options():
     parser = OptionParser(add_help_option=False)
     parser.add_option("-u", "--user_no", dest="user_no",
                     default=0,help="select user_group number")
-
     parser.add_option("-h", "--help",action="help")
 
     (options, args) = parser.parse_args()
-
     user_no = int(options.user_no)
+
     if user_no in USERS:
         TEST_USER = USERS[user_no]
 
@@ -137,15 +135,32 @@ def main():
     set_options()
     user_me = TEST_USER[0]
     user_op = TEST_USER[1]
+
     a_visitor = vistor(user_me,SERVER_ADDR)
     
     a_visitor.register()
+    a_visitor.ask_user_all()
     a_visitor.ask_user(user_op)
-
-    a_visitor.turn_data_to_uid("hello try to miss you",user_op)
-
+    a_visitor.turn_data_to_uid("HELLO ! TEST TURN DATA",user_op)
     a_visitor.loop()
+
+
+def test():
+    import redis 
+    pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True) 
+    # host是redis主机，需要redis服务端和客户端都起着 redis默认端口是6379 
+    r = redis.Redis(connection_pool=pool) 
+    r.set('gender', 'male') 
+    # key是"gender" value是"male" 将键值对存入redis缓存 
+    print(r.get('gender')) # gender 取出键male对应的值
+
+
+
+
+
 
 if __name__ == "__main__":
 
-    main()
+
+    test()
+    #main()
