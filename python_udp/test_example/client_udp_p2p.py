@@ -137,6 +137,7 @@ def main():
     user_op = TEST_USER[1]
 
     a_visitor = vistor(user_me,SERVER_ADDR)
+
     
     a_visitor.register()
     a_visitor.ask_user_all()

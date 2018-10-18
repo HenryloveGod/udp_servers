@@ -1,7 +1,7 @@
 from dc_utils.dc_log import logging
 import sys
-
 from dc_utils.convert_utils import *
+
 
 '''
 eotudata协议

@@ -84,7 +84,6 @@ def set_data_int_to_msg_buf(msg_buf,sttp,data_type,value,bit_num):
 def set_data_int32_to_msg_buf(msg_buf,sttp,data_type,value):
     return set_data_int_to_msg_buf(msg_buf,sttp,data_type,value,4)
 
-
 '''
     拼接数据类型为整型的数据到msg_buf中
 @msg_buf 
