@@ -85,8 +85,9 @@ class worker(DatagramProtocol):
             if ask_uid in self.clients:
                 res = self.clients[ask_uid]
                 res["ask_uid"] = ask_uid
-                res = json.dumps(res)
                 res["method"] = "ask_user_response"
+
+                res = json.dumps(res)
                 #res = json.dumps(self.clients[ask_uid])
             else:
                 res = "error! user[%d] not found in server" % (ask_uid)
@@ -116,6 +117,7 @@ class worker(DatagramProtocol):
             if to_uid[0] in self.clients:
                 to_addr_obj = self.clients[to_uid[0]]["addr"]
                 to_addr = (to_addr_obj["ip"],to_addr_obj["port"])
+                #开始转发
                 self.transport_write_back(org_data,to_addr)
                 self.transport_write_back(b"turn ok",addr)
             else:
