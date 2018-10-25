@@ -95,7 +95,7 @@ class worker(DatagramProtocol):
             self.transport_write_back(res,addr)
 
         except Exception as e:
-            logging.error(str(e))
+            logging.error("PYTHON_SERVER ERROR:" + str(e))
             self.transport_write_back(str(e),addr)
 
     #将请求的用户信息返还
@@ -106,7 +106,28 @@ class worker(DatagramProtocol):
             print(e)
             raise BaseException("SERVER INTER ERROR ! ask_user_all handle error")
 
-    def turn_data_handle(self,json_data,stream_data,addr,org_data):
+    def proone_turn_data_handle(self,json_data,addr):
+        turn_data_fields = ("to_uid","from_uid")
+        try:
+            if False in map(lambda x:True if x in json_data else False, turn_data_fields ):
+                raise Exception("reg_json field ERROR")
+
+            to_uid = json_data["to_uid"]
+            if to_uid[0] in self.clients:
+                to_addr_obj = self.clients[to_uid[0]]["addr"]
+                to_addr = (to_addr_obj["ip"],to_addr_obj["port"])
+                #开始转发
+                self.transport_write_back(json_data,to_addr)
+                self.transport_write_back(b"turn ok",addr)
+            else:
+                self.transport_write_back(b"turn fail, user not registed!",addr)
+
+        except Exception as e:
+            logging.error(e)
+            self.transport_write_back(e.__str__,addr)  
+
+
+    def turn_data_handle(self,json_data , addr , stream_data = None,org_data = None):
 
         turn_data_fields = ("to_uid","from_uid")
         try:
@@ -134,7 +155,7 @@ class worker(DatagramProtocol):
         "ask_user_all":ask_user_all_handle,
         "register":register_handle,
         "ask_user":ask_user_handle,
-        "turn_data":turn_data_handle
+        "turn_data":proone_turn_data_handle
     }
 
     prttwo_method_cb={
