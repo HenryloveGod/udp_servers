@@ -4,7 +4,7 @@ from dc_utils.dc_log import logging
 
 import sys
 
-port = 9001
+port = 3490
 
 
 
