@@ -113,8 +113,8 @@ class worker(DatagramProtocol):
                 raise Exception("reg_json field ERROR")
 
             to_uid = json_data["to_uid"]
-            if to_uid[0] in self.clients:
-                to_addr_obj = self.clients[to_uid[0]]["addr"]
+            if to_uid in self.clients:
+                to_addr_obj = self.clients[to_uid]["addr"]
                 to_addr = (to_addr_obj["ip"],to_addr_obj["port"])
                 #开始转发
                 self.transport_write_back(json_data,to_addr)
