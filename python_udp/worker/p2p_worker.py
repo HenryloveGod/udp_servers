@@ -60,10 +60,13 @@ class worker(DatagramProtocol):
 
             uid = reg_json["uid"]
             self.clients[uid] =  {
-                "addr":addr,
+                "addr":{"ip":addr[0],"port":addr[1]},
                 "channel":reg_json["channel"]
             }
-            self.transport_write_back("ok",addr)
+
+            r = {"result":"ok"}
+            self.transport_write_back(r,addr)
+
         except Exception as e:
             logging.error(str(e))
             self.transport_write_back(str(e),addr) 
