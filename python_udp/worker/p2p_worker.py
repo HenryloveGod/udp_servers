@@ -38,6 +38,7 @@ class worker(DatagramProtocol):
         elif isinstance(data,dict) :
             tmp = json.dumps(self.clients)
             res = bytes(tmp,encoding="utf-8")
+            logging.debug("dict debug ---:%s",res)
         elif isinstance(data,bytes):
             res = data
         elif isinstance(data,int):
@@ -117,7 +118,8 @@ class worker(DatagramProtocol):
                 to_addr_obj = self.clients[to_uid]["addr"]
                 to_addr = (to_addr_obj["ip"],to_addr_obj["port"])
                 #开始转发
-                self.transport_write_back(json_data,to_addr)
+                res = json.dumps(json_data)
+                self.transport_write_back(res,to_addr)
                 self.transport_write_back(b"turn ok",addr)
             else:
                 self.transport_write_back(b"turn fail, user not registed!",addr)
